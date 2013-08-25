@@ -1,0 +1,92 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.minehattan</groupId>
+    <artifactId>fights</artifactId>
+    <version>0.3</version>
+    <packaging>jar</packaging>
+
+    <!-- Project information -->
+    <name>Fights</name>
+    <inceptionYear>2012</inceptionYear>
+    <description>A commandbook-component to manage PvP fights</description>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License 3.0</name>
+            <url>LICENSE.txt</url>
+            <distribution>repo</distribution>
+            <comments>License on Fights</comments>
+        </license>
+    </licenses>
+
+    <properties> <!-- Fix encoding warnings -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>bukkit-repo</id>
+            <url>http://repo.bukkit.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>sk89q-repo</id>
+            <url>http://maven.sk89q.com/repo/</url>
+        </repository>
+        <repository>
+            <id>maven-repo</id>
+            <url>http://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>kitteh-repo</id>
+            <url>http://repo.kitteh.org/content/groups/public</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency> <!-- Bukkit implementation -->
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.6.2-R0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>worldedit</artifactId>
+            <version>5.5.8-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>commandbook</artifactId>
+            <version>2.3.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.zachsthings.libcomponents</groupId>
+                    <artifactId>libcomponents-bukkit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.spout</groupId>
+                    <artifactId>spoutapi</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.name}</finalName>
+        <defaultGoal>clean install</defaultGoal>
+
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
+</project>
