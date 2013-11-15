@@ -1,5 +1,9 @@
 package de.minehattan.fights;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Color;
@@ -15,10 +19,27 @@ public class Fireworks {
     private static final int FIREWORK_REPEAT = 5;
     private static final int FIREWORK_OFFSET = 6;
 
-    private final Type[] type = Type.values();
-    private final Color[] colour = Color.class.getEnumConstants();
+    private final List<Type> type = Arrays.asList(Type.values());
+    private final List<Color> colors = new ArrayList<Color>();
 
-    private  Random random = new Random();
+    private Random random = new Random();
+
+    public Fireworks() {
+        //Reflection to get all predefined colors, even if new ones are added with newer minecraft versions.
+        Field[] colourFields = Color.class.getFields();
+        for (Field field : colourFields) {
+            if (field.getType().isAssignableFrom(Color.class)) {
+                try {
+                    colors.add((Color) field.get(this));
+                } catch (IllegalArgumentException e) {
+                    CommandBook.logger().warning("Failed to add color-field " + field.getName() + ", ignoring it.");
+                } catch (IllegalAccessException e) {
+                    CommandBook.logger().warning("Failed to add color-field " + field.getName() + ", ignoring it.");
+                }
+            }
+        }
+
+    }
 
     private void firework(Location loc) {
         Firework firework1 = loc.getWorld().spawn(
@@ -28,16 +49,14 @@ public class Fireworks {
                 Firework.class);
         FireworkMeta data1 = (FireworkMeta) firework1.getFireworkMeta();
         FireworkMeta data2 = (FireworkMeta) firework2.getFireworkMeta();
-        data1.addEffects(FireworkEffect.builder().withColor(colour[(random).nextInt(colour.length - 1)])
-                .withColor(colour[(random).nextInt(colour.length - 1)])
-                .withColor(colour[(random).nextInt(colour.length - 1)]).with(type[(random).nextInt(type.length - 1)])
-                .trail((random).nextBoolean()).flicker((random).nextBoolean()).build());
-        data2.addEffects(FireworkEffect.builder().withColor(colour[(random).nextInt(colour.length - 1)])
-                .withColor(colour[(random).nextInt(colour.length - 1)])
-                .withColor(colour[(random).nextInt(colour.length - 1)]).with(type[(random).nextInt(type.length - 1)])
-                .trail((random).nextBoolean()).flicker((random).nextBoolean()).build());
+
+        data1.addEffect(FireworkEffect.builder().withColor(getRandomColors(3))
+                .with(type.get(random.nextInt(type.size()))).flicker((random).nextBoolean()).build());
+        data2.addEffect(FireworkEffect.builder().withColor(getRandomColors(3))
+                .with(type.get(random.nextInt(type.size()))).flicker((random).nextBoolean()).build());
         data1.setPower((random).nextInt(2) + 2);
         data2.setPower((random).nextInt(2) + 2);
+
         firework1.setFireworkMeta(data1);
         firework2.setFireworkMeta(data2);
     }
@@ -51,5 +70,13 @@ public class Fireworks {
                 }
             }, 5L + i * 4);
         }
+    }
+
+    private Color[] getRandomColors(int count) {
+        Color[] ret = new Color[count];
+        for (int i = 0; i < count; i++) {
+            ret[i] = (colors.get(random.nextInt(colors.size())));
+        }
+        return ret;
     }
 }
