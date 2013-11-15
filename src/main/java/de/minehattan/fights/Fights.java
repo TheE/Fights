@@ -130,7 +130,8 @@ public class Fights extends BukkitComponent {
         @Command(aliases = { "set" }, usage = "[-c #] <player1> <player2> <...>", desc = "Starts a fight between multiple players", flags = "dlc:f", min = 2)
         @CommandPermissions({ "fights.set" })
         public void set(CommandContext args, CommandSender sender) throws CommandException {
-            Location lightning = args.hasFlag('l') ? PlayerUtil.checkPlayer(sender).getEyeLocation() : null;
+            Location lightning = args.hasFlag('l') ? PlayerUtil.checkPlayer(sender).getTargetBlock(null, 40)
+                    .getLocation() : null;
             int count = DEFAULT_COUNTDOWN;
 
             if (args.hasFlag('c')) {
@@ -223,7 +224,8 @@ public class Fights extends BukkitComponent {
             if (countdownTask != null) {
                 throw new CommandException(config.countdownRunningMessage);
             }
-            Location lightning = args.hasFlag('l') ? PlayerUtil.checkPlayer(sender).getEyeLocation() : null;
+            Location lightning = args.hasFlag('l') ? PlayerUtil.checkPlayer(sender).getTargetBlock(null, 40)
+                    .getLocation() : null;
             int count = DEFAULT_COUNTDOWN;
             if (args.hasFlag('c')) {
                 CommandBook.inst().checkPermission(sender, "fights.countdown.custom");
@@ -236,7 +238,7 @@ public class Fights extends BukkitComponent {
     public SessionComponent getSessions() {
         return sessions;
     }
-
+    
     public FreezeComponent getFreeze() {
         return freeze;
     }
