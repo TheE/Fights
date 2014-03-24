@@ -27,6 +27,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import com.sk89q.commandbook.CommandBook;
 import com.sk89q.commandbook.kits.Kit;
 import com.sk89q.commandbook.util.ChatUtil;
+import com.sk89q.commandbook.util.LocationUtil;
 import com.zachsthings.libcomponents.config.ConfigurationBase;
 import com.zachsthings.libcomponents.config.Setting;
 
@@ -85,7 +86,8 @@ public class FightFactory extends ConfigurationBase implements Listener {
      *            a list with all fighting players
      * @return the registered fight
      */
-    public Fight registerFight(int count, Location lightning, boolean playFirework, Kit weapons, List<Player> fighters) {
+    public Fight registerFight(int count, Location lightning, boolean playFirework, Kit weapons,
+            List<Player> fighters) {
         return new Fight(count, lightning, playFirework, weapons, fighters);
     }
 
@@ -99,7 +101,8 @@ public class FightFactory extends ConfigurationBase implements Listener {
         Fight fight = fightMap.get(player.getName());
         fight.endFight();
 
-        component.broadcast(fightStoppedMessage.replace("%fight%", StringUtils.join(fight.getFighters(), " vs. ")));
+        component.broadcast(fightStoppedMessage.replace("%fight%",
+                StringUtils.join(fight.getFighters(), " vs. ")));
     }
 
     /**
@@ -123,7 +126,8 @@ public class FightFactory extends ConfigurationBase implements Listener {
         if (!component.getSessions().getSession(FightSession.class, player).needsRespawn()) {
             return;
         }
-        event.setRespawnLocation(component.getSessions().getSession(FightSession.class, player).getRespawnLoc());
+        event.setRespawnLocation(LocationUtil.findFreePosition(component.getSessions()
+                .getSession(FightSession.class, player).getRespawnLoc()));
         component.getSessions().getSession(FightSession.class, player).resetRespawn();
 
         restoreInventory(player);
@@ -170,7 +174,8 @@ public class FightFactory extends ConfigurationBase implements Listener {
                 player.setScoreboard(fightBoard);
 
                 // initialize the fight-session
-                component.getSessions().getSession(FightSession.class, player).initialize(player, weapons != null);
+                component.getSessions().getSession(FightSession.class, player)
+                        .initialize(player, weapons != null);
 
                 // clean inventory and distribute the weapons
                 if (weapons != null) {
@@ -191,8 +196,8 @@ public class FightFactory extends ConfigurationBase implements Listener {
 
             // run countdown if needed
             if (count > 0) {
-                countdownTask = new FightCountdown(component, this, count, lightning, countdownTask).runTaskTimer(
-                        CommandBook.inst(), 20, 20);
+                countdownTask = new FightCountdown(component, this, count, lightning, countdownTask)
+                        .runTaskTimer(CommandBook.inst(), 20, 20);
             }
         }
 
@@ -211,7 +216,8 @@ public class FightFactory extends ConfigurationBase implements Listener {
                 if (showFirework) {
                     fireworks.showFirework(winner.getLocation());
                 }
-                winner.teleport(component.getSessions().getSession(FightSession.class, winner).getRespawnLoc());
+                winner.teleport(component.getSessions().getSession(FightSession.class, winner)
+                        .getRespawnLoc());
             }
 
             for (String fighter : fighters) {
