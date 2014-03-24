@@ -26,7 +26,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import com.sk89q.commandbook.CommandBook;
 import com.sk89q.commandbook.kits.Kit;
-import com.sk89q.commandbook.util.PlayerUtil;
+import com.sk89q.commandbook.util.ChatUtil;
 import com.zachsthings.libcomponents.config.ConfigurationBase;
 import com.zachsthings.libcomponents.config.Setting;
 
@@ -207,7 +207,7 @@ public class FightFactory extends ConfigurationBase implements Listener {
 
             if (isOver()) { // normal way of ending a fight - announce winner
                 Player winner = CommandBook.server().getPlayerExact(fighters.get(0));
-                component.broadcast(wonMessage.replace("%player%", PlayerUtil.toName(winner)));
+                component.broadcast(wonMessage.replace("%player%", ChatUtil.toName(winner)));
                 if (showFirework) {
                     fireworks.showFirework(winner.getLocation());
                 }

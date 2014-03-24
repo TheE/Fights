@@ -20,7 +20,9 @@ import com.sk89q.commandbook.kits.Kit;
 import com.sk89q.commandbook.kits.KitsComponent;
 import com.sk89q.commandbook.session.SessionComponent;
 import com.sk89q.commandbook.session.SessionFactory;
-import com.sk89q.commandbook.util.PlayerUtil;
+import com.sk89q.commandbook.util.ChatUtil;
+import com.sk89q.commandbook.util.InputUtil;
+import com.sk89q.commandbook.util.entity.player.PlayerUtil;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -142,7 +144,7 @@ public class Fights extends BukkitComponent {
             // check if all given players are valid
             ArrayList<Player> fighters = new ArrayList<Player>();
             for (String targetName : args.getParsedSlice(0)) { // 1 + flagLength
-                Player player = PlayerUtil.matchSinglePlayer(sender, targetName);
+                Player player = InputUtil.PlayerParser.matchSinglePlayer(sender, targetName);
                 if (fighters.contains(player.getName())) {
                     throw new CommandException(config.fightAgainstMessage.replaceAll("%player%", player.getName()));
                 }
@@ -177,14 +179,14 @@ public class Fights extends BukkitComponent {
                 countdownTask = null;
                 broadcast(config.countdownStoppedMessage);
             } else {
-                Player player = PlayerUtil.matchSinglePlayer(sender, args.getString(0));
+                Player player = InputUtil.PlayerParser.matchSinglePlayer(sender, args.getString(0));
                 if (!fightFactory.isFighting(player)) {
                     throw new CommandException(config.notFightingMessage.replaceAll("%player%",
-                            PlayerUtil.toName(player)));
+                            ChatUtil.toName(player)));
                 }
                 fightFactory.stopFight(player);
                 sender.sendMessage(ChatColor.AQUA
-                        + config.fightStoppedCmdMessage.replaceAll("%player%", PlayerUtil.toName(player)));
+                        + config.fightStoppedCmdMessage.replaceAll("%player%", ChatUtil.toName(player)));
             }
         }
 
@@ -196,7 +198,7 @@ public class Fights extends BukkitComponent {
             }
             ArrayList<String> players = new ArrayList<String>();
             for (String player : args.getSlice(0)) {
-                players.add(PlayerUtil.toName(PlayerUtil.matchSinglePlayer(sender, player)));
+                players.add(ChatUtil.toName(InputUtil.PlayerParser.matchSinglePlayer(sender, player)));
             }
             Collections.shuffle(players, random);
 
