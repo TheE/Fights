@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.minehattan</groupId>
     <artifactId>fights</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4</version>
     <packaging>jar</packaging>
 
     <!-- Project information -->
@@ -46,7 +46,7 @@
         <dependency> <!-- Bukkit implementation -->
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.7.2-R0.1</version>
+            <version>1.7.2-R0.3</version>
         </dependency>
 
         <dependency>
