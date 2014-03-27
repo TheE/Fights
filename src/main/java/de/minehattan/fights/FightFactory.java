@@ -216,8 +216,6 @@ public class FightFactory extends ConfigurationBase implements Listener {
                 if (showFirework) {
                     fireworks.showFirework(winner.getLocation());
                 }
-                winner.teleport(component.getSessions().getSession(FightSession.class, winner)
-                        .getRespawnLoc());
             }
 
             for (String fighter : fighters) {
@@ -232,6 +230,9 @@ public class FightFactory extends ConfigurationBase implements Listener {
                 if (weapons != null) {
                     restoreInventory(player);
                 }
+
+                player.teleport(LocationUtil.findFreePosition(component.getSessions()
+                        .getSession(FightSession.class, player).getRespawnLoc()));
             }
         }
 
