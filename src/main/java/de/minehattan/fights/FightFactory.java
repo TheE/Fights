@@ -294,8 +294,7 @@ public class FightFactory extends ConfigurationBase implements Listener {
     }
 
     /**
-     * Custom countdown used before a fight is started - will freeze an unfreeze
-     * players
+     * Custom countdown for fights that freezes the player until the countdown is over.
      */
     public class FightCountdown extends Countdown {
         private final Fight fight;

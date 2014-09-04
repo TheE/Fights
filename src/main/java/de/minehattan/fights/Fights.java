@@ -143,7 +143,7 @@ public class Fights extends BukkitComponent {
 
             // check if all given players are valid
             ArrayList<Player> fighters = new ArrayList<Player>();
-            for (String targetName : args.getParsedSlice(0)) { // 1 + flagLength
+            for (String targetName : args.getParsedSlice(0)) {
                 Player player = InputUtil.PlayerParser.matchSinglePlayer(sender, targetName);
                 if (fighters.contains(player.getName())) {
                     throw new CommandException(config.fightAgainstMessage.replaceAll("%player%", player.getName()));
